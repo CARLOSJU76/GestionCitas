@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Citas;
 use App\Models\Clientes;
@@ -31,5 +31,35 @@ class CitaController extends Controller
 
         return redirect()->route('addCitas')->with('success', 'Cita registrada correctamente.');
     }
+
+    public function viewCitas()
+    {
+        // Realizamos la consulta con los INNER JOIN para obtener los datos
+        $citas = DB::table('citas')
+                    ->join('clientes', 'citas.cliente_id', '=', 'clientes.id')
+                    ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
+                    ->join('estados', 'citas.estado_id', '=', 'estados.id')
+                    ->select('citas.id as id', // Seleccionamos el id de la cita y lo aliasamos como "id"
+                             'clientes.nombre as cliente_nombre', 
+                             'servicios.nombre as servicio_nombre',
+                             'estados.estado as estado',
+                             'citas.fecha_hora')
+                    ->get();
+    
+        // Pasamos los datos a la vista
+        return view('gestioncitas.citas', compact('citas'));
+    }
+    
+public function deleteCita($id)
+    {
+        $citas= Citas::find($id);
+        //dd($producto);
+        if(! $citas){
+            return redirect()->route('citas',  ['id' => $id])->with('error', 'Los datos de esta cita no fueron encontrados.');
+        }
+        $citas->delete();
+        return redirect()->route('citas',  ['id' => $id])->with('success', 'La Cita ha sido eliminada de la Base de Datos');
+    }
+    
 
 }
