@@ -4,7 +4,7 @@
     En esta sección puedes actualizar y edtar las citas agendas por nuestros clientes.<br>
 
     <div class="container">
-    <h2>Actulización de Citas</h2>
+    <h2>Actualización de Citas</h2>
 
     {{-- Select dinámico --}}
         <div class="form-group mb-3">
