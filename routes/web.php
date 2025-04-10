@@ -42,9 +42,14 @@ Route::get('/addservicios', function (){
 });
 Route::post('/addservicios', [ServiciosController::class, 'store'])->name('addservicios');
 //=======================================================================================
-Route::get('/updateservicios', function (){
-    return view('gestionCitas.updateservicios');
-});
+Route::get('/updateservicios', [ServiciosController::class, 'ajaxEditView'])->name('updateservicios');
+
+// Devuelve datos del cliente vía AJAX (JS lo usa)
+Route::get('/api/servicios/{id}', [ServiciosController::class, 'getServicio']);
+
+// Actualiza el cliente (cuando se envía el formulario)
+Route::put('/serviciosupdate/{id}', [ServiciosController::class, 'updateServicio'])->name('servicios.update');
+
 //======================================================================================
 //====================CITAS=============================================================
 Route::get('/Citas', [CitaController::class, 'viewCitas'])->name('citas');
@@ -55,6 +60,12 @@ Route::get('/addCitas', [CitaController::class, 'viewCreateCitas']);
 
 Route::post('/addCitas', [CitaController::class, 'store'])->name('addCitas');
 //=======================================================================================
-Route::get('/updateCitas', function (){
-    return view('gestionCitas.updateCitas');
-});
+Route::get('/updateCitas', [ServiciosController::class, 'ajaxEditView'])->name('updateCitas');
+
+// Devuelve datos del cliente vía AJAX (JS lo usa)
+Route::get('/api/citas/{id}', [ServiciosController::class, 'getCita']);
+
+// Actualiza el cliente (cuando se envía el formulario)
+Route::put('/citasupdate/{id}', [ServiciosController::class, 'updateCita'])->name('citas.update');
+
+//===========================================================
