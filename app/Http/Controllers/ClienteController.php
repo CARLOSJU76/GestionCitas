@@ -35,10 +35,7 @@ class ClienteController extends Controller
             return redirect()->route('clientes',  ['id' => $id])->with('error', 'no se encontraron datos del cliente.');
         }
         $cliente->delete();
-        return redirect()->route('clientes',  ['id' => $id])->with('success', 'Datos del cliente han sido excluidos de la Base de Datos');
     } 
-//=======================================================================================
-////====================ACTUALIZAR========================================================
     public function update(Request $request, $id)
     {
         // Validar los datos que vienen en la solicitud
@@ -58,7 +55,7 @@ class ClienteController extends Controller
         $clientes->save();
         
         return redirect()->route('actualizar', ['id' => $id])->with('success', 
-        'Información actulizada en BD exitosamente.');
+        'Información actualizada en BD exitosamente.');
     }
     public function getCliente($id)
 {

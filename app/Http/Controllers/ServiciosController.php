@@ -36,4 +36,38 @@ class ServiciosController extends Controller
         $servicios->delete();
         return redirect()->route('servicios',  ['id' => $id])->with('success', 'Datos del cliente han sido excluidos de la Base de Datos');
     }
+//=========================================================================================================
+public function updateServicio(Request $request, $id)
+{
+    // Validar los datos que vienen en la solicitud
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'precio' => 'required|string|max:20',
+    ]);
+
+    // Buscar el cliente
+    $servicios = Servicios::findOrFail($id);
+
+    // Actualizar los campos
+    $servicios->nombre = $request->input('nombre');
+    $servicios->precio = $request->input('precio');
+
+    // Guardar los cambios
+    $servicios->save();
+    
+    return redirect()->route('updateservicios', ['id' => $id])->with('success', 
+    'Información del Servicio ha sido actualizada en BD exitosamente.');
+}
+public function getServicio($id)
+{
+$servicios = Servicios::findOrFail($id);
+return response()->json($servicios);
+}
+public function ajaxEditView()
+{
+$servicios = Servicios::all();
+return view('gestionCitas/updateservicios', compact('servicios'));
+}
+
+//=========================================================================================================
 }
