@@ -60,12 +60,12 @@ Route::get('/addCitas', [CitaController::class, 'viewCreateCitas']);
 
 Route::post('/addCitas', [CitaController::class, 'store'])->name('addCitas');
 //=======================================================================================
-Route::get('/updateCitas', [ServiciosController::class, 'ajaxEditView'])->name('updateCitas');
+Route::get('/updateCitas', [CitaController::class, 'ajaxEditView'])->name('updateCitas');
 
 // Devuelve datos del cliente vía AJAX (JS lo usa)
-Route::get('/api/citas/{id}', [ServiciosController::class, 'getCita']);
+Route::get('/api/citas/{id}', [CitaController::class, 'getCita']);
 
 // Actualiza el cliente (cuando se envía el formulario)
-Route::put('/citasupdate/{id}', [ServiciosController::class, 'updateCita'])->name('citas.update');
+Route::put('/citasupdate/{id}', [CitaController::class, 'updateCita'])->name('citas.update');
 
 //===========================================================

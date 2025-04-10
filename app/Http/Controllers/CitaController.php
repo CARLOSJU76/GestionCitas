@@ -82,7 +82,7 @@ public function deleteCita($id)
     // Guardar los cambios
     $citas->save();
     
-    return redirect()->route('updateservicios', ['id' => $id])->with('success', 
+    return redirect()->route('updateCitas', ['id' => $id])->with('success', 
     'Información del Servicio ha sido actualizada en BD exitosamente.');
 }
 public function getCita($id)
