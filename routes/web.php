@@ -69,8 +69,8 @@ Route::get('/api/citas/{id}', [CitaController::class, 'getCita']);
 // Actualiza el cliente (cuando se envía el formulario)
 Route::put('/citasupdate/{id}', [CitaController::class, 'updateCita'])->name('citas.update');
 //==================HORARIOS===================================================================
-Route::get('/horarios', function (){
-    return view('gestionCitas.horarios');
-});
-Route::get('/addHorarios', [HorarioController::class, 'viewAddHorario']);
-Route::post('/addHorarios', [HorarioController::class, 'store'])->name('addHorarios');
+
+Route::resource('horarios', HorarioController::class);
+Route::post('/horarios/multiple', [HorarioController::class, 'storeMultiple'])->name('horarios.storeMultiple');
+
+
