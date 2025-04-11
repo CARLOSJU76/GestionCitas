@@ -11,6 +11,7 @@
 <a href="clientes">Clientes</a> |
 <a href="servicios">Servicios</a> |
 <a href="Citas">Gestión de Citas</a> |
+<a href="horarios">Horarios</a> |
 <br>
 @yield('content') 
 <!-- //Es una instrucción de Blade. -->

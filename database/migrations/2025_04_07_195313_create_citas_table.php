@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cliente_id');
             $table->unsignedBigInteger('servicio_id');
             $table->unsignedBigInteger('estado_id');
+            $table->unsignedBigInteger('horario_id');
             $table->dateTime('fecha_hora');
 
             $table->timestamps();
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('servicio_id')->references('id')->on('servicios')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('estado_id')->references('id')->on('estados')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('horario_id')->references('id')->on('horarios')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
