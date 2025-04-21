@@ -21,7 +21,7 @@
     </style>
 </head>
 <body class="bg-light text-dark">
-
+<!-- ===================================================================================================================================================== -->
     {{-- Navbar --}}
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
         <div class="container">
@@ -53,7 +53,7 @@
             </div>
         </div>
     </nav>
-
+<!-- ================================================================================================================================ -->
     {{-- Contenido --}}
     <main class="container">
         {{-- Alertas --}}
@@ -74,7 +74,7 @@
         {{-- Contenido dinámico --}}
         @yield('content')
     </main>
-
+<!-- =======================FOOTER========================================================================================================== -->
     <footer class="text-center py-4 mt-5 text-muted">
         <small>Aplicación de Gestión de Horarios © {{ date('Y') }}</small>
     </footer>

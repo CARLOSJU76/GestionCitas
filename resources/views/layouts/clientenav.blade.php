@@ -3,24 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
-    <title>Clientes</title>
-</head>
-<body>
-<a href="bienvenida">Inicio</a> |
-<a href="clientes">Consultar Clientes</a> |
-<a href="agregar">Inscripción de Clientes</a> |
-<a href="actualizar">Actualizar Clientes</a> |
-<br>
-@yield('content') 
-<!-- //Es una instrucción de Blade. -->
-    <br>Hola ... template operando!!
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+    <title>@yield('title', 'Sección Clientes')</title>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
+    {{-- Estilos adicionales para mejor contraste en modo oscuro --}}
+    <style>
+        body {
+            transition: background 0.3s, color 0.3s;
+        }
+        .navbar, .card, .alert {
+            transition: background 0.3s, color 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-light text-dark">
+
+{{-- Navbar --}}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="bi bi-calendar2-week me-2"></i> Gestión de Citas
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navLinks">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="{{ url('bienvenida') }}" class="nav-link">
+                            <i class="bi bi-house"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('clientes') }}" class="nav-link">
+                        <i class="bi bi-people"></i> Clientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('agregar') }}" class="nav-link">
+                            <i class="bi bi-plus-circle"></i> Agregar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('actualizar') }}" class="nav-link">
+                        <i class="bi bi-arrow-clockwise"></i> Actualizar Clientes
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {{-- Alertas --}}
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        @endif
+
+        {{-- Contenido dinámico --}}
+        @yield('content')
+    </main>
 </body>
 </html>
