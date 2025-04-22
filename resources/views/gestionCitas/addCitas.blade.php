@@ -35,8 +35,20 @@
             </select>
         </div>
 
-        <!-- Estado -->
+       
+        <!-- Fecha y Hora -->
         <div class="mb-3">
+            <label for="horario_id" class="form-label">Estado:</label>
+            <select name="horario_id" class="form-select" required>
+                <option value="">Selecciona  un turno de servicio</option>
+                @foreach($horarios as $horario)
+                    <option value="{{ $horario->id }}">{{ $horario->fecha_hora }}</option>
+                @endforeach
+            </select>
+        </div>
+
+         <!-- Estado -->
+         <div class="mb-3">
             <label for="estado_id" class="form-label">Estado:</label>
             <select name="estado_id" class="form-select" required>
                 <option value="">Selecciona un estado</option>
@@ -44,12 +56,6 @@
                     <option value="{{ $estado->id }}">{{ $estado->estado }}</option>
                 @endforeach
             </select>
-        </div>
-
-        <!-- Fecha y Hora -->
-        <div class="mb-3">
-            <label for="fecha_hora" class="form-label">Fecha y hora:</label>
-            <input type="datetime-local" name="fecha_hora" class="form-control" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Guardar cita</button>

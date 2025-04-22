@@ -17,7 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('servicio_id');
             $table->unsignedBigInteger('estado_id');
             $table->unsignedBigInteger('horario_id');
-            $table->dateTime('fecha_hora');
 
             $table->timestamps();
 

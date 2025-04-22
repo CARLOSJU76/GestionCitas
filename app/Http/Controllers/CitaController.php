@@ -7,6 +7,7 @@ use App\Models\Citas;
 use App\Models\Clientes;
 use App\Models\Servicios;
 use App\Models\Estados;
+use App\Models\Horarios;
 
 class CitaController extends Controller
 {
@@ -15,8 +16,9 @@ class CitaController extends Controller
         $clientes = Clientes::all();
         $servicios = Servicios::all();
         $estados = Estados::all();
+        $horarios= Horarios::all();
 
-        return view('gestionCitas.addCitas', compact('clientes', 'servicios', 'estados'));
+        return view('gestionCitas.addCitas', compact('clientes', 'servicios', 'estados', 'horarios'));
     }
     public function store(Request $request)
     {
@@ -39,11 +41,12 @@ class CitaController extends Controller
                     ->join('clientes', 'citas.cliente_id', '=', 'clientes.id')
                     ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
                     ->join('estados', 'citas.estado_id', '=', 'estados.id')
+                    ->join('horarios', 'citas.horario_id', 'horarios.id' )
                     ->select('citas.id as id', // Seleccionamos el id de la cita y lo aliasamos como "id"
                              'clientes.nombre as cliente_nombre', 
                              'servicios.nombre as servicio_nombre',
                              'estados.estado as estado',
-                             'citas.fecha_hora')
+                             'horarios.fecha_hora as fecha_hora')
                     ->get();
     
         // Pasamos los datos a la vista
@@ -67,7 +70,7 @@ public function deleteCita($id)
         'cliente_id' => 'required|exists:clientes,id',
             'servicio_id' => 'required|exists:servicios,id',
             'estado_id' => 'required|exists:estados,id',
-            'fecha_hora' => 'required|date',
+            'horario_id' => 'required|exists:horarios,id',
     ]);
 
     // Buscar el cliente
@@ -77,7 +80,8 @@ public function deleteCita($id)
     $citas->cliente_id = $request->input('cliente_id');
     $citas->servicio_id= $request->input('servicio_id');
     $citas->estado_id= $request->input('estado_id');
-    $citas->fecha_hora= $request->input('fecha_hora');
+    $citas->horario_id=$request->input('horario_id');
+   
 
     // Guardar los cambios
     $citas->save();
@@ -97,11 +101,12 @@ public function ajaxEditView()
         ->join('clientes', 'citas.cliente_id', '=', 'clientes.id')
         ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
         ->join('estados', 'citas.estado_id', '=', 'estados.id')
+        ->join('horarios', 'citas.horario_id', 'horarios.id')
         ->select('citas.id as id', 
                  'clientes.nombre as cliente_nombre', 
                  'servicios.nombre as servicio_nombre',
                  'estados.estado as estado',
-                 'citas.fecha_hora',
+                 'horarios.fecha_hora as fecha_hora',
                  'citas.cliente_id',
                  'citas.servicio_id',
                  'citas.estado_id')
@@ -111,6 +116,7 @@ public function ajaxEditView()
     $clientes = DB::table('clientes')->get();
     $servicios = DB::table('servicios')->get();
     $estados = DB::table('estados')->get();
+    $horarios=DB::table('horarios')->get();
 
     // Pasamos los datos a la vista
     return view('gestionCitas/updateCitas', compact('citas', 'clientes', 'servicios', 'estados'));
