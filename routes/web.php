@@ -63,6 +63,10 @@ Route::post('/addCitas', [CitaController::class, 'store'])->name('addCitas');
 //=======================================================================================
 Route::get('/updateCitas', [CitaController::class, 'ajaxEditView'])->name('updateCitas');
 
+Route::get('/api/citas/{id}', [CitaController::class, 'show']);
+
+
+
 // Devuelve datos del cliente vía AJAX (JS lo usa)
 Route::get('/api/citas/{id}', [CitaController::class, 'getCita']);
 
@@ -74,7 +78,18 @@ Route::resource('horarios', HorarioController::class);
 Route::post('/horarios/multiple', [HorarioController::class, 'storeMultiple'])->name('horarios.storeMultiple');
 
 //=============================================================================================
+
+Route::put('/citasupdate/{id}', [CitaController::class, 'update'])->name('citas.update');
+
 Route::get('/get-horarios-por-servicio', [CitaController::class, 'getHorariosPorServicio'])->name('getHorariosPorServicio');
+Route::get('/api/horarios', [CitaController::class, 'getHorariosPorServicio']);
+// Ruta para mostrar la vista de actualización de citas
+Route::get('/citas/editar', [CitaController::class, 'edit'])->name('citas.edit');
+
+// Ruta para enviar los datos editados
+
+
+Route::get('/api/citas/{id}', [CitaController::class, 'show'])->name('api.citas.show');
 
 
 
