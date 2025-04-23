@@ -4,7 +4,7 @@
     En esta sección puedes actualizar los datos de los Clientes y/o pacientes.<br>
 
     <div class="container">
-    <h2>Actulización Datos de Clientes</h2>
+    <h2>Actualización Datos de Clientes</h2>
 
     {{-- Select dinámico --}}
     <div class="form-group mb-3">

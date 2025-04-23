@@ -26,10 +26,13 @@ class CitaController extends Controller
             'cliente_id' => 'required|exists:clientes,id',
             'servicio_id' => 'required|exists:servicios,id',
             'estado_id' => 'required|exists:estados,id',
-            'fecha_hora' => 'required|date',
+            'horario_id' => 'required|exists:horarios,id',
         ]);
 
         Citas::create($request->all());
+
+        Horarios::where('id', $request->horario_id)
+        ->update(['disponible' => 0]);
 
         return redirect()->route('addCitas')->with('success', 'Cita registrada correctamente.');
     }
@@ -120,6 +123,21 @@ public function ajaxEditView()
 
     // Pasamos los datos a la vista
     return view('gestionCitas/updateCitas', compact('citas', 'clientes', 'servicios', 'estados'));
+}
+public function getHorariosPorServicio(Request $request)
+{
+    // Obtener los horarios según el servicio_id
+    if ($request->ajax()) {
+        $horarios = Horarios::where('servicio_id', $request->servicio_id)
+        ->where('disponible', 1)
+        ->orderBy('fecha_hora', 'asc')
+        ->get();
+
+        // Devolver los horarios en formato JSON
+        return response()->json([
+            'horarios' => $horarios
+        ]);
+    }
 }
 
 

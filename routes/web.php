@@ -73,4 +73,8 @@ Route::put('/citasupdate/{id}', [CitaController::class, 'updateCita'])->name('ci
 Route::resource('horarios', HorarioController::class);
 Route::post('/horarios/multiple', [HorarioController::class, 'storeMultiple'])->name('horarios.storeMultiple');
 
+//=============================================================================================
+Route::get('/get-horarios-por-servicio', [CitaController::class, 'getHorariosPorServicio'])->name('getHorariosPorServicio');
+
+
 
