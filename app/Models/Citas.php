@@ -16,5 +16,16 @@ class Citas extends Model
         'estado_nombre',
         'fecha_hora',
     ];
+
+    // En App\Models\Citas.php
+public function horario()
+{
+    return $this->belongsTo(Horarios::class);
+}
+public function cliente()
+{
+    return $this->belongsTo(Clientes::class, 'cliente_id');
+}
+
     
 }

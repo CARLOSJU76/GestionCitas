@@ -7,7 +7,7 @@ use App\Models\Servicios;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class HorarioController extends Controller
+class HorariosController extends Controller
 {
     // Mostrar todos los horarios agrupados por servicio y fecha
     public function index(Request $request)
@@ -128,5 +128,23 @@ class HorarioController extends Controller
         return redirect()->route('horarios.index')
             ->with('success', "$horariosAgregados horario(s) asignado(s) exitosamente.");
     }
+    public function getHorariosPorServicio(Request $request)
+{
+    // Obtener los horarios según el servicio_id
+    if ($request->ajax()) {
+        $ahora = now(); // Fecha y hora actual
+
+        $horarios = Horarios::where('servicio_id', $request->servicio_id)
+        ->where('disponible', 1)
+        ->where('fecha_hora', '>=', $ahora)
+        ->orderBy('fecha_hora', 'asc')
+        ->get();
+
+        // Devolver los horarios en formato JSON
+        return response()->json([
+            'horarios' => $horarios
+        ]);
+    }
+}
     
 }

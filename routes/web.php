@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ServiciosController;
 use App\Http\Controllers\CitaController;
-use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\HorariosController;
 use App\Models\Clientes;
 
 Route::get('/', function () {
@@ -65,31 +65,22 @@ Route::get('/updateCitas', [CitaController::class, 'ajaxEditView'])->name('updat
 
 Route::get('/api/citas/{id}', [CitaController::class, 'show']);
 
-
-
-// Devuelve datos del cliente vía AJAX (JS lo usa)
-Route::get('/api/citas/{id}', [CitaController::class, 'getCita']);
-
 // Actualiza el cliente (cuando se envía el formulario)
 Route::put('/citasupdate/{id}', [CitaController::class, 'updateCita'])->name('citas.update');
 //==================HORARIOS===================================================================
 
-Route::resource('horarios', HorarioController::class);
-Route::post('/horarios/multiple', [HorarioController::class, 'storeMultiple'])->name('horarios.storeMultiple');
+Route::resource('horarios', HorariosController::class);
+Route::post('/horarios/multiple', [HorariosController::class, 'storeMultiple'])->name('horarios.storeMultiple');
 
 //=============================================================================================
 
+Route::get('/get-horarios-por-servicio', [HorariosController::class, 'getHorariosPorServicio'])->name('getHorariosPorServicio');
+
+//===========Rutas para Actualizar Citas===================================================================================
+
+Route::get('/citas/editar', [CitaController::class, 'editView'])->name('citas.editView');
+Route::get('/api/citas/{id}', [CitaController::class, 'getCita']);
+// Ruta para obtener los horarios por servicio
+Route::get('/api/horarios', [HorariosController::class, 'getHorariosPorServicio']);
+// Ruta para actualizar la cita
 Route::put('/citasupdate/{id}', [CitaController::class, 'update'])->name('citas.update');
-
-Route::get('/get-horarios-por-servicio', [CitaController::class, 'getHorariosPorServicio'])->name('getHorariosPorServicio');
-Route::get('/api/horarios', [CitaController::class, 'getHorariosPorServicio']);
-// Ruta para mostrar la vista de actualización de citas
-Route::get('/citas/editar', [CitaController::class, 'edit'])->name('citas.edit');
-
-// Ruta para enviar los datos editados
-
-
-Route::get('/api/citas/{id}', [CitaController::class, 'show'])->name('api.citas.show');
-
-
-

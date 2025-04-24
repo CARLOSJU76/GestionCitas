@@ -11,10 +11,10 @@ use App\Models\Horarios;
 
 class CitaController extends Controller
 {
+//===========FUNCIÓN PARA MOSTRAR LA VISTA AL CREAR CITAS====================================================================================
     public function viewCreateCitas()
     {
        
-
         $clientes = Clientes::all();
         $servicios = Servicios::all();
         $estados = Estados::all();
@@ -22,38 +22,44 @@ class CitaController extends Controller
        
         return view('gestionCitas.addCitas', compact('clientes', 'servicios', 'estados', 'horarios'));
     }
-    public function store(Request $request)
-    {
-        
-        // Validar los datos que vienen en la solicitud
-        $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
-            'servicio_id' => 'required|exists:servicios,id',
-            'estado_id' => 'required|exists:estados,id',
-            'horario_id' => 'required|exists:horarios,id',
-        ]);
-        $cliente = Clientes::findOrFail($request->cliente_id);
-        $servicio = Servicios::findOrFail($request->servicio_id);
-        $estado = Estados::findOrFail($request->estado_id);
-        $horario = Horarios::findOrFail($request->horario_id);
+//===========FUNCIÓN PARA CREAR CITAS=====================================================================================
+public function store(Request $request)
+{
+    $request->validate([
+        'cliente_id' => 'required|exists:clientes,id',
+        'servicio_id' => 'required|exists:servicios,id',
+        'estado_id' => 'required|exists:estados,id',
+        'horario_id' => 'required|exists:horarios,id',
+    ]);
 
-        Citas::create([
-            'cliente_id' => $cliente->id,
-            'servicio_id' => $servicio->id,
-            'estado_id' => $estado->id,
-            'horario_id' => $horario->id,
-            'cliente_nombre' => $cliente->nombre,
-            'servicio_nombre' => $servicio->nombre,
-            'estado_nombre' => $estado->estado,
-            'fecha_hora' => $horario->fecha_hora,
-        ]);
+    $cliente = Clientes::findOrFail($request->cliente_id);
+    $servicio = Servicios::findOrFail($request->servicio_id);
+    $estado = Estados::findOrFail($request->estado_id);
+    $horario = Horarios::findOrFail($request->horario_id);
 
-        Horarios::where('id', $request->horario_id)
-        ->update(['disponible' => 0]);
+    $cita = Citas::create([
+        'cliente_id' => $cliente->id,
+        'servicio_id' => $servicio->id,
+        'estado_id' => $estado->id,
+        'horario_id' => $horario->id,
+    ]);
 
-        return redirect()->route('addCitas')->with('success', 'Cita registrada correctamente.');
-    }
-//================================================================================================
+    // Guardar en historial
+    \App\Models\HistorialCitas::create([
+        'cita_id' => $cita->id,
+        'cliente_nombre' => $cliente->nombre,
+        'servicio_nombre' => $servicio->nombre,
+        'estado_nombre' => $estado->estado,
+        'fecha_hora' => $horario->fecha_hora,
+    ]);
+
+    // Marcar horario como no disponible
+    Horarios::where('id', $request->horario_id)->update(['disponible' => 0]);
+
+    return redirect()->route('addCitas')->with('success', 'Cita registrada correctamente.');
+}
+
+//=============FUNCIÓN PARA VER TODOS LOS REGISTROS DE LAS CITAS===================================================================================
     public function viewCitas()
     {
         // Realizamos la consulta con los INNER JOIN para obtener los datos
@@ -72,139 +78,97 @@ class CitaController extends Controller
         // Pasamos los datos a la vista
         return view('gestioncitas.citas', compact('citas'));
     }
-//================================================================================================
+//=================FUNCIÓN PARA BORRAR LAS CITAS===============================================================================
 public function deleteCita($id)
-    {
-        $citas= Citas::find($id);
-        //dd($producto);
-        if(! $citas){
-            return redirect()->route('citas',  ['id' => $id])->with('error', 'Los datos de esta cita no fueron encontrados.');
-        }
-        $citas->delete();
-        return redirect()->route('citas',  ['id' => $id])->with('success', 'La Cita ha sido eliminada de la Base de Datos');
-    }
-//================================================================================================
-    public function updateCita(Request $request, $id)
 {
-    // Validar los datos que vienen en la solicitud
-    $request->validate([
-        'cliente_id' => 'required|exists:clientes,id',
-            'servicio_id' => 'required|exists:servicios,id',
-            'estado_id' => 'required|exists:estados,id',
-            'horario_id' => 'required|exists:horarios,id',
-    ]);
-
-    // Buscar el cliente
-    $citas = Citas::findOrFail($id);
-
-    // Actualizar los campos
-    $citas->cliente_id = $request->input('cliente_id');
-    $citas->servicio_id= $request->input('servicio_id');
-    $citas->estado_id= $request->input('estado_id');
-    $citas->horario_id=$request->input('horario_id');
-    // Guardar los cambios
-    $citas->save();
-    
-    return redirect()->route('updateCitas', ['id' => $id])->with('success', 
-    'Información del Servicio ha sido actualizada en BD exitosamente.');
-}
-//================================================================================================
-public function getCita($id)
-{
-$citas = Citas::findOrFail($id);
-return response()->json($citas);
-}
-//================================================================================================
-public function ajaxEditView()
-{
-    $citas = DB::table('citas')
-        ->join('clientes', 'citas.cliente_id', '=', 'clientes.id')
-        ->select('citas.id', 'clientes.nombre as cliente_nombre')
-        ->get();
-
-    $clientes = DB::table('clientes')->get();
-    $servicios = DB::table('servicios')->get();
-    $estados = DB::table('estados')->get();
-
-    return view('gestionCitas.updateCitas', compact('citas', 'clientes', 'servicios', 'estados'));
-}
-//================================================================================================
-// En CitasController.php
-public function show($id)
-{
-    $cita = DB::table('citas')
-        ->join('clientes', 'citas.cliente_id', '=', 'clientes.id')
-        ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
-        ->join('estados', 'citas.estado_id', '=', 'estados.id')
-        ->join('horarios', 'citas.horario_id', 'horarios.id')
-        ->where('citas.id', $id)
-        ->select(
-            'citas.id',
-            'citas.cliente_id',
-            'citas.servicio_id',
-            'citas.estado_id',
-            'horarios.id as horario_id',
-            'horarios.fecha_hora'
-        )
-        ->first();
+    $cita = Citas::find($id);
 
     if (!$cita) {
-        return response()->json(['error' => 'Cita no encontrada'], 404);
+        return redirect()->route('citas', ['id' => $id])
+                         ->with('error', 'Los datos de esta cita no fueron encontrados.');
     }
 
-    return response()->json($cita);
+    // 1. Recuperar el horario_id antes de eliminar la cita
+    $horarioId = $cita->horario_id;
+
+    // 2. Eliminar la cita
+    $cita->delete();
+
+    // 3. Actualizar el campo 'disponible' del horario
+    Horarios::where('id', $horarioId)->update(['disponible' => 1]);
+
+    return redirect()->route('citas', ['id' => $id])
+                     ->with('success', 'La Cita ha sido eliminada de la Base de Datos y el horario liberado.');
 }
-
-
-
-public function getHorariosPorServicio(Request $request)
+//==================FUCNCIÓN PARA LLEGAR A LA VISTA EDITAR=============================================================================
+public function editView()
 {
-    // Obtener los horarios según el servicio_id
-    if ($request->ajax()) {
-        $ahora = now(); // Fecha y hora actual
+    $citas = Citas::with(['cliente', 'horario'])->orderBy('horario_id', 'asc')->get();
 
-        $horarios = Horarios::where('servicio_id', $request->servicio_id)
-        ->where('disponible', 1)
-        ->where('fecha_hora', '>=', $ahora)
-        ->orderBy('fecha_hora', 'asc')
-        ->get();
+    $clientes = Clientes::all();
+    $servicios = Servicios::all();
+    $estados = Estados::all();
 
-        // Devolver los horarios en formato JSON
-        return response()->json([
-            'horarios' => $horarios
-        ]);
+    return view('gestioncitas.editar', compact('citas', 'clientes', 'servicios', 'estados'));
+}
+//===================función para actualizar citas=========================================================
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'cliente_id' => 'required|exists:clientes,id',
+        'servicio_id' => 'required|exists:servicios,id',
+        'estado_id' => 'required|exists:estados,id',
+        'horario_id' => 'required|exists:horarios,id',
+    ]);
+
+    $cita = Citas::findOrFail($id);
+    $horarioAnteriorId = $cita->horario_id;
+
+    // Buscar datos actualizados
+    $cliente = Clientes::findOrFail($request->cliente_id);
+    $servicio = Servicios::findOrFail($request->servicio_id);
+    $estado = Estados::findOrFail($request->estado_id);
+    $nuevoHorario = Horarios::findOrFail($request->horario_id);
+
+    // Actualizar la cita
+    $cita->update([
+        'cliente_id' => $cliente->id,
+        'servicio_id' => $servicio->id,
+        'estado_id' => $estado->id,
+        'horario_id' => $nuevoHorario->id,
+    ]);
+
+    // Actualizar disponibilidad de horarios
+    if ($horarioAnteriorId != $request->horario_id) {
+        Horarios::where('id', $horarioAnteriorId)->update(['disponible' => 1]);
+        Horarios::where('id', $request->horario_id)->update(['disponible' => 0]);
     }
+
+    // ✅ Actualizar historial
+    \App\Models\HistorialCitas::updateOrCreate(
+        ['cita_id' => $cita->id], // condición para encontrar el registro
+        [ // valores a actualizar
+            'cliente_nombre' => $cliente->nombre,
+            'servicio_nombre' => $servicio->nombre,
+            'estado_nombre' => $estado->estado,
+            'fecha_hora' => $nuevoHorario->fecha_hora,
+        ]
+    );
+
+    return redirect()->route('addCitas')->with('success', 'Cita actualizada correctamente.');
 }
-public function edit($id)
+public function getCita($id)
 {
-    // Traemos la cita específica por su ID
-    $cita = DB::table('citas')
-        ->join('clientes', 'citas.cliente_id', '=', 'clientes.id')
-        ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
-        ->join('estados', 'citas.estado_id', '=', 'estados.id')
-        ->join('horarios', 'citas.horario_id', '=', 'horarios.id')
-        ->select('citas.id as id',
-                 'clientes.nombre as cliente_nombre',
-                 'servicios.nombre as servicio_nombre',
-                 'estados.estado as estado',
-                 'horarios.fecha_hora as fecha_hora',
-                 'horarios.id as horario_id',
-                 'citas.cliente_id',
-                 'citas.servicio_id',
-                 'citas.estado_id')
-        ->where('citas.id', $id)
-        ->first();
+    $cita = Citas::with('horario')->findOrFail($id);
 
-    // Traemos todos los clientes, servicios, estados y horarios disponibles para los selects
-    $clientes = DB::table('clientes')->get();
-    $servicios = DB::table('servicios')->get();
-    $estados = DB::table('estados')->get();
-    $horarios = DB::table('horarios')->get();
-
-    // Pasamos los datos a la vista
-    return view('gestionCitas.updateCitas', compact('cita', 'clientes', 'servicios', 'estados', 'horarios'));
+    return response()->json([
+        'id' => $cita->id,
+        'cliente_id' => $cita->cliente_id,
+        'servicio_id' => $cita->servicio_id,
+        'estado_id' => $cita->estado_id,
+        'horario_id' => $cita->horario_id,
+        'fecha_hora' => $cita->horario->fecha_hora, // 👈 aquí está la clave
+    ]);
 }
-
-
 
 }

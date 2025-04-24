@@ -63,7 +63,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url ('updateCitas' )}}"  class="nav-link">
+                        <a class="nav-link" href="{{ route('citas.editView') }}" class="nav-link">
                         <i class="bi bi-arrow-clockwise"></i> Editar Citas
                         </a>
                     </li>
