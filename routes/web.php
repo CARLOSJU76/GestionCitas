@@ -17,7 +17,7 @@ Route::get('/bienvenida', function (){
 //======================================================================================
 //====================CLIENTES==========================================================
 Route::get('/clientes', [ClienteController::class, 'viewCliente'])->name('clientes');
-Route::delete('/deleteCliente/{id}', [ClienteController::class,'deleteCliente'])->name('deleteCliente');
+Route::delete('/clientes/{id}', [ClienteController::class,'deleteCliente'])->name('deleteCliente');
 //======================================================================================
 Route::get('/agregar', function (){
     return view('gestionCitas.inserCliente');

@@ -58,7 +58,6 @@ public function store(Request $request)
 
     return redirect()->route('addCitas')->with('success', 'Cita registrada correctamente.');
 }
-
 //=============FUNCIÓN PARA VER TODOS LOS REGISTROS DE LAS CITAS===================================================================================
     public function viewCitas()
     {
