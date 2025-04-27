@@ -84,3 +84,7 @@ Route::get('/api/citas/{id}', [CitaController::class, 'getCita']);
 Route::get('/api/horarios', [HorariosController::class, 'getHorariosPorServicio']);
 // Ruta para actualizar la cita
 Route::put('/citasupdate/{id}', [CitaController::class, 'update'])->name('citas.update');
+//=========================================================================================================================
+use App\Http\Controllers\VehiculoController;
+
+Route::resource('vehiculos', VehiculoController::class);

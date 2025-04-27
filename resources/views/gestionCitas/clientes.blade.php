@@ -7,18 +7,25 @@
     <table class="table table-bordered">
   <thead>
     <tr>
-      <th scope="col">Código</th>
-      <th scope="col">Nombre del Cliente</th>
-      <th scope="col">Teléfono</th>
+                    <th>Nombre</th>
+                    <th>Identificación</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Perfil</th>
+                    <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
     @foreach($clientes as $cliente)
     
     <tr>
-      <th scope="row">{{$cliente->id}}</th>
+      
       <td>{{$cliente->nombre}}</td>
+      <td>{{ $cliente->identificacion }}</td>
+      <td>{{ $cliente->email }}</td>
       <td>{{$cliente->telefono}}</td>
+      <td>{{ $cliente->perfil ? $cliente->perfil->nombre : 'No asignado' }}</td>
+      
       <td>
         <form action = "{{ route('deleteCliente', $cliente->id) }}" method='post' onsubmit="return confirm('Seguro que quieres eliminar los datos del Cliente?;')">
           @csrf

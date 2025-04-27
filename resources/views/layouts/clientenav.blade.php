@@ -55,6 +55,16 @@
                         <i class="bi bi-arrow-clockwise"></i> Actualizar Clientes
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('vehiculos.index') }}" class="nav-link">
+                            <i class="bi bi-car-front"></i> Listar Vehículos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('vehiculos.create') }}" class="nav-link">
+                            <i class="bi bi-car-front-fill"></i> Agregar Vehículo
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

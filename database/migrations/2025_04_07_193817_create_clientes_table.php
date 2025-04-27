@@ -13,9 +13,16 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');      // varchar por defecto 255
-            $table->string('telefono'); 
+            $table->string('nombre', 255);
+            $table->string('telefono', 20);
+            $table->string('identificacion', 20)->unique();
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->unsignedBigInteger('perfil_id')->nullable();
             $table->timestamps();
+
+            // Definir la clave foránea hacia la tabla perfiles
+            $table->foreign('perfil_id')->references('id')->on('perfiles')->onDelete('set null');
         });
     }
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\Clientes;
+use App\Models\Perfil; // Asegúrate de importar el modelo de la tabla 'perfiles' si lo usas para validación de clave foránea
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ClienteController extends Controller
 {
@@ -12,32 +14,47 @@ class ClienteController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'telefono' => 'required|string|max:20',
+            'identificacion' => 'required|string|max:20|unique:clientes',  // Validar identificación única
+            'email' => 'required|email|unique:clientes',  // Validar email único
+            'password' => 'required|string|min:8|confirmed', // Validar contraseña (mínimo 8 caracteres y confirmación)
         ]);
 
         // Crear el cliente
-        $cliente = Clientes::create($validated);
+        $cliente = Clientes::create([
+            'nombre' => $validated['nombre'],
+            'telefono' => $validated['telefono'],
+            'identificacion' => $validated['identificacion'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']), // Encriptar la contraseña
+        ]);
 
         // Devolver respuesta (puede ser un redirect o JSON)
         return redirect()->route('agregar')->with('success', 'Cliente incluido en BD exitosamente.');
     }
     
-    public function viewCliente(){
-
-        $clientes= Clientes::all();
-
+    public function viewCliente()
+    {
+        // Primero ejecuta la consulta
+        $clientes = Clientes::with('perfil')->get();
+    
+        // Luego oculta el campo password
+        $clientes->makeHidden(['password']);
+    
         return view('gestioncitas.clientes', compact('clientes'));
     }
+    
+
+
     public function deleteCliente($id)
     {
-        $cliente= Clientes::find($id);
-        //dd($producto);
-        if(! $cliente){
-            return redirect()->route('clientes',  ['id' => $id])->with('error', 'no se encontraron datos del cliente.');
+        $cliente = Clientes::find($id);
+        if (!$cliente) {
+            return redirect()->route('clientes', ['id' => $id])->with('error', 'No se encontraron datos del cliente.');
         }
         $cliente->delete();
         return redirect()->route('clientes', ['id' => $id])
-                     ->with('success', 'Datos del Cliente han sido excluido de la Base de Datos.');
-}
+                         ->with('success', 'Datos del Cliente han sido excluidos de la Base de Datos.');
+    }
 
     public function update(Request $request, $id)
     {
@@ -45,6 +62,9 @@ class ClienteController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'telefono' => 'required|string|max:20',
+            'identificacion' => 'required|string|max:20|unique:clientes,identificacion,' . $id, // Excluir el cliente actual de la validación
+            'email' => 'required|email|unique:clientes,email,' . $id, // Excluir el cliente actual de la validación
+            'perfil_id' => 'required|exists:perfiles,id', // Validar que perfil_id exista en la tabla perfiles
         ]);
 
         // Buscar el cliente
@@ -53,6 +73,9 @@ class ClienteController extends Controller
         // Actualizar los campos
         $clientes->nombre = $request->input('nombre');
         $clientes->telefono = $request->input('telefono');
+        $clientes->identificacion = $request->input('identificacion');
+        $clientes->email = $request->input('email');
+        $clientes->perfil_id = $request->input('perfil_id');
 
         // Guardar los cambios
         $clientes->save();
@@ -60,18 +83,16 @@ class ClienteController extends Controller
         return redirect()->route('actualizar', ['id' => $id])->with('success', 
         'Información actualizada en BD exitosamente.');
     }
+
     public function getCliente($id)
-{
-    $cliente = Clientes::findOrFail($id);
-    return response()->json($cliente);
+    {
+        $cliente = Clientes::findOrFail($id);
+        return response()->json($cliente);
+    }
+
+    public function ajaxEditView()
+    {
+        $clientes = Clientes::all();
+        return view('gestionCitas.updateClientes', compact('clientes'));
+    }
 }
-public function ajaxEditView()
-{
-    $clientes = Clientes::all();
-    return view('gestionCitas/updateClientes', compact('clientes'));
-}
-
-
-}  
-        
-
