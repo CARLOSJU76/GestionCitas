@@ -8,6 +8,8 @@ use App\Models\Clientes;
 use App\Models\Servicios;
 use App\Models\Estados;
 use App\Models\Horarios;
+use App\Models\Vehiculo;
+
 
 class CitaController extends Controller
 {
@@ -19,8 +21,9 @@ class CitaController extends Controller
         $servicios = Servicios::all();
         $estados = Estados::all();
         $horarios = Horarios::all();
+        $vehiculos = Vehiculo::all();
        
-        return view('gestionCitas.addCitas', compact('clientes', 'servicios', 'estados', 'horarios'));
+        return view('gestionCitas.addCitas', compact('clientes', 'servicios', 'estados', 'horarios', 'vehiculos'));
     }
 //===========FUNCIÓN PARA CREAR CITAS=====================================================================================
 public function store(Request $request)
@@ -28,20 +31,23 @@ public function store(Request $request)
     $request->validate([
         'cliente_id' => 'required|exists:clientes,id',
         'servicio_id' => 'required|exists:servicios,id',
-        'estado_id' => 'required|exists:estados,id',
         'horario_id' => 'required|exists:horarios,id',
+        'vehiculo_id' => 'required|exists:vehiculos,id',
     ]);
 
     $cliente = Clientes::findOrFail($request->cliente_id);
     $servicio = Servicios::findOrFail($request->servicio_id);
-    $estado = Estados::findOrFail($request->estado_id);
     $horario = Horarios::findOrFail($request->horario_id);
+    $vehiculo = Vehiculo::findOrFail($request->vehiculo_id);
+
+    $estado_id = 1; // ← 🔥 Asignamos directamente estado_id en 1
 
     $cita = Citas::create([
         'cliente_id' => $cliente->id,
         'servicio_id' => $servicio->id,
-        'estado_id' => $estado->id,
+        'estado_id' => $estado_id, // ← Usamos 1 aquí
         'horario_id' => $horario->id,
+        'vehiculo_id' => $vehiculo->id, 
     ]);
 
     // Guardar en historial
@@ -49,7 +55,7 @@ public function store(Request $request)
         'cita_id' => $cita->id,
         'cliente_nombre' => $cliente->nombre,
         'servicio_nombre' => $servicio->nombre,
-        'estado_nombre' => $estado->estado,
+        'estado_nombre' => Estados::findOrFail($estado_id)->estado,
         'fecha_hora' => $horario->fecha_hora,
     ]);
 
@@ -58,6 +64,7 @@ public function store(Request $request)
 
     return redirect()->route('addCitas')->with('success', 'Cita registrada correctamente.');
 }
+
 //=============FUNCIÓN PARA VER TODOS LOS REGISTROS DE LAS CITAS===================================================================================
     public function viewCitas()
     {
@@ -67,11 +74,13 @@ public function store(Request $request)
                     ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
                     ->join('estados', 'citas.estado_id', '=', 'estados.id')
                     ->join('horarios', 'citas.horario_id', 'horarios.id' )
+                    ->join('vehiculos', 'citas.vehiculo_id', '=', 'vehiculos.id')
                     ->select('citas.id as id', // Seleccionamos el id de la cita y lo aliasamos como "id"
                              'clientes.nombre as cliente_nombre', 
                              'servicios.nombre as servicio_nombre',
                              'estados.estado as estado',
-                             'horarios.fecha_hora as fecha_hora')
+                             'horarios.fecha_hora as fecha_hora',
+                             'vehiculos.placa as vehiculo_placa')
                     ->get();
     
         // Pasamos los datos a la vista
@@ -102,13 +111,14 @@ public function deleteCita($id)
 //==================FUCNCIÓN PARA LLEGAR A LA VISTA EDITAR=============================================================================
 public function editView()
 {
-    $citas = Citas::with(['cliente', 'horario'])->orderBy('horario_id', 'asc')->get();
+    $citas = Citas::with(['cliente', 'horario', 'vehiculo'])->orderBy('horario_id', 'asc')->get();
 
     $clientes = Clientes::all();
     $servicios = Servicios::all();
     $estados = Estados::all();
+    $vehiculos = Vehiculo::all();
 
-    return view('gestioncitas.editar', compact('citas', 'clientes', 'servicios', 'estados'));
+    return view('gestioncitas.editar', compact('citas', 'clientes', 'servicios', 'estados', 'vehiculos'));
 }
 //===================función para actualizar citas=========================================================
 public function update(Request $request, $id)
@@ -116,8 +126,9 @@ public function update(Request $request, $id)
     $request->validate([
         'cliente_id' => 'required|exists:clientes,id',
         'servicio_id' => 'required|exists:servicios,id',
-        'estado_id' => 'required|exists:estados,id',
+      
         'horario_id' => 'required|exists:horarios,id',
+        'vehiculo_id' => 'required|exists:vehiculos,id', 
     ]);
 
     $cita = Citas::findOrFail($id);
@@ -126,15 +137,17 @@ public function update(Request $request, $id)
     // Buscar datos actualizados
     $cliente = Clientes::findOrFail($request->cliente_id);
     $servicio = Servicios::findOrFail($request->servicio_id);
-    $estado = Estados::findOrFail($request->estado_id);
+  
     $nuevoHorario = Horarios::findOrFail($request->horario_id);
+    $vehiculo = Vehiculo::findOrFail($request->vehiculo_id);
 
     // Actualizar la cita
     $cita->update([
         'cliente_id' => $cliente->id,
         'servicio_id' => $servicio->id,
-        'estado_id' => $estado->id,
+      
         'horario_id' => $nuevoHorario->id,
+        'vehiculo_id' => $vehiculo->id, 
     ]);
 
     // Actualizar disponibilidad de horarios
@@ -149,7 +162,7 @@ public function update(Request $request, $id)
         [ // valores a actualizar
             'cliente_nombre' => $cliente->nombre,
             'servicio_nombre' => $servicio->nombre,
-            'estado_nombre' => $estado->estado,
+          
             'fecha_hora' => $nuevoHorario->fecha_hora,
         ]
     );
@@ -167,7 +180,23 @@ public function getCita($id)
         'estado_id' => $cita->estado_id,
         'horario_id' => $cita->horario_id,
         'fecha_hora' => $cita->horario->fecha_hora, // 👈 aquí está la clave
+        'vehiculo_id' => $cita->vehiculo_id,
     ]);
 }
+public function editCitas()
+{
+    $usuario_id = session('usuario_id'); // 👈 Obtenemos el usuario que está en sesión
+
+    $citas = Citas::where('cliente_id', $usuario_id)
+                  ->with(['cliente', 'horario'])
+                  ->get();
+
+    $clientes = Clientes::where('id', $usuario_id)->get(); // 👈 Solo el cliente logueado
+    $servicios = Servicios::all();
+    $estados = Estados::all();
+
+    return view('gestioncitas.editMyCita', compact('citas', 'clientes', 'servicios', 'estados'));
+}
+
 
 }

@@ -5,7 +5,9 @@ use App\Models\Clientes;
 use App\Models\Perfil; // Asegúrate de importar el modelo de la tabla 'perfiles' si lo usas para validación de clave foránea
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\Servicios;
+use App\Models\Estados; // Asegúrate de importar el modelo de la tabla 'vehiculos' si lo usas para validación de clave foránea
+use App\Models\Vehiculo; // Asegúrate de importar el modelo de la tabla 'vehiculos' si lo usas para validación de clave foránea
 class ClienteController extends Controller
 {
     public function store(Request $request)
@@ -64,7 +66,7 @@ class ClienteController extends Controller
             'telefono' => 'required|string|max:20',
             'identificacion' => 'required|string|max:20|unique:clientes,identificacion,' . $id, // Excluir el cliente actual de la validación
             'email' => 'required|email|unique:clientes,email,' . $id, // Excluir el cliente actual de la validación
-            'perfil_id' => 'required|exists:perfiles,id', // Validar que perfil_id exista en la tabla perfiles
+            // 'perfil_id' => 'required|exists:perfiles,id', // Validar que perfil_id exista en la tabla perfiles
         ]);
 
         // Buscar el cliente
@@ -75,7 +77,7 @@ class ClienteController extends Controller
         $clientes->telefono = $request->input('telefono');
         $clientes->identificacion = $request->input('identificacion');
         $clientes->email = $request->input('email');
-        $clientes->perfil_id = $request->input('perfil_id');
+        // $clientes->perfil_id = $request->input('perfil_id');
 
         // Guardar los cambios
         $clientes->save();
@@ -95,4 +97,25 @@ class ClienteController extends Controller
         $clientes = Clientes::all();
         return view('gestionCitas.updateClientes', compact('clientes'));
     }
+    public function editPerfilCliente()
+{
+    $clienteId = session('usuario_id');  // Obtener el ID guardado en la sesión
+    $cliente = Clientes::find($clienteId);
+
+    return view('gestioncitas.editarcliente', compact('cliente'));
+}
+public function showFormularioCita()
+{
+    $usuario_id = session('usuario_id'); // <- Tu ID guardado al iniciar sesión
+
+    $servicios = Servicios::all();
+    
+    $vehiculos = Vehiculo::where('cliente_id', $usuario_id)->get(); // <- Los vehículos del cliente
+
+    return view('gestioncitas.crearcita', compact('servicios', 'vehiculos', 'usuario_id'));
+}
+
+
+
+
 }

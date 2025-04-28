@@ -44,6 +44,13 @@
                 @endforeach
             </select>
         </div>
+        <div class="mb-3">
+            <label for="vehiculo_id" class="form-label">Vehículo:</label>
+            <select name="vehiculo_id" id="vehiculo_id" class="form-select" required>
+                <option value="">Selecciona un Vehículo </option>
+                
+            </select>
+        </div>
 
         {{-- Horario --}}
         <div class="form-group mb-3">
@@ -86,6 +93,7 @@ document.getElementById('cita_select').addEventListener('change', function () {
             document.getElementById('estado_id').value = data.estado_id;
 
             cargarHorarios(data.servicio_id, data.horario_id, data.fecha_hora);
+            cargarVehiculos(data.cliente_id); // Cargar vehículos del cliente
 
             // Establecer el evento onchange para el servicio
             document.getElementById('servicio_id').onchange = function () {
@@ -98,6 +106,32 @@ document.getElementById('cita_select').addEventListener('change', function () {
             alert("Error al cargar los datos de la cita.");
         });
 });
+
+function cargarVehiculos(clienteId) {
+    const vehiculoSelect = document.getElementById('vehiculo_id');
+    vehiculoSelect.innerHTML = '<option>Cargando vehículos...</option>';
+
+    fetch(`/api/vehiculos?cliente_id=${clienteId}`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const vehiculos = data.vehiculos || [];
+        vehiculoSelect.innerHTML = '';
+
+        vehiculos.forEach(v => {
+            const option = document.createElement('option');
+            option.value = v.id;
+            option.textContent = v.placa;
+            vehiculoSelect.appendChild(option);
+        });
+    })
+    .catch(err => {
+        console.error("Error cargando vehículos:", err);
+    });
+}
 
 function cargarHorarios(servicioId, horarioActualId = null, horarioTexto=null) {
     const horarioSelect = document.getElementById('horario_id');
@@ -171,4 +205,5 @@ Object.entries(agrupados).forEach(([fecha, hs], index) => {
 }
 
 </script>
+
 @endsection

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('servicio_id');
             $table->unsignedBigInteger('estado_id');
             $table->unsignedBigInteger('horario_id');
+            $table->unsignedBigInteger('vehiculo_id');
 
             $table->timestamps();
 
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->foreign('servicio_id')->references('id')->on('servicios')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('estado_id')->references('id')->on('estados')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('horario_id')->references('id')->on('horarios')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('vehiculo_id')->references('id')->on('vehiculos')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

@@ -13,7 +13,7 @@
         <!-- Cliente -->
         <div class="mb-3">
             <label for="cliente_id" class="form-label">Cliente:</label>
-            <select name="cliente_id" class="form-select" required>
+            <select name="cliente_id" class="form-select" id="cliente_id" required>
                 <option value="">Selecciona un cliente</option>
                 @foreach($clientes as $cliente)
                     <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
@@ -31,6 +31,14 @@
                 @endforeach
             </select>
         </div>
+        <div class="mb-3">
+            <label for="vehiculo_id" class="form-label">Vehículo:</label>
+            <select name="vehiculo_id" id="vehiculo_id" class="form-select" required>
+                <option value="">Selecciona un Vehículo </option>
+                
+            </select>
+        </div>
+
 
         <!-- Horarios -->
         <div class="mb-3">
@@ -104,6 +112,23 @@
     }
 });
 
+</script>
+<script>
+     $('#cliente_id').on('change', function() {
+    var cliente_id = $(this).val();
+    if (cliente_id) {
+        $.ajax({
+            url: '{{ route("getVehiculoPorCliente") }}',
+            method: 'GET',
+            data: { cliente_id: cliente_id },
+            success: function(response) {
+                $('#vehiculo_id').empty().append('<option value="">Selecciona un vehículo</option>');
+                response.vehiculos.forEach(function(vehiculo) {
+                    $('#vehiculo_id').append(`<option value="${vehiculo.id}">${vehiculo.placa}</option>`);
+                });
+            }
+        });
+     }});
 </script>
 
 @endsection

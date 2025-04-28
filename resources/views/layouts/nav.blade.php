@@ -18,6 +18,21 @@
         .navbar, .card, .alert {
             transition: background 0.3s, color 0.3s;
         }
+
+        /* Estilo personalizado para el nombre del usuario */
+        .navbar .usuario-nombre {
+            font-style: italic;
+            color: #FFD700; /* Puedes cambiar este color a lo que prefieras */
+            text-align: center;
+            margin-left: 15px;
+            font-weight: bold;
+        }
+
+        /* Estilo para centrar el nombre del usuario dentro de la barra de navegación */
+        .navbar .navbar-brand.usuariologo {
+            flex-grow: 1;
+            text-align: center;
+        }
     </style>
 </head>
 <body class="bg-light text-dark">
@@ -28,6 +43,12 @@
             <a class="navbar-brand d-flex align-items-center" href="#">
                 <i class="bi bi-calendar2-week me-2"></i> Gestión de Citas
             </a>
+
+            {{-- Nombre del usuario centrado --}}
+            <a class="navbar-brand usuariologo">
+                <span class="usuario-nombre">Bienvenido, {{ session('usuario_nombre') }}</span>
+            </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -59,8 +80,10 @@
             </div>
         </div>
     </nav>
- {{-- Contenido --}}
- <main class="container">
+
+{{-- Contenido --}}
+<main class="container">
+    
         {{-- Alertas --}}
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -78,14 +101,15 @@
 
         {{-- Contenido dinámico --}}
         @yield('content')
-    </main>
-<!-- ====================================================================================================================== -->
+</main>
+
+<!-- Footer -->
 <footer class="text-center py-4 mt-5 text-muted">
-        <small>Aplicación de Gestión de Horarios © {{ date('Y') }}</small>
+    <small>Aplicación de Gestión de Horarios © {{ date('Y') }}</small>
 </footer>
 
- {{-- Scripts --}}
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{{-- Scripts --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 {{-- Activar modo oscuro si el sistema lo tiene activo --}}
 <script>

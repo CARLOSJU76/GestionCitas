@@ -1,5 +1,8 @@
 @extends('layouts.nav')
+
 @section('content')
-    Hola Amigos!<br>    
-    Bienvenidos al Sistema de Gestión de la Empresa.<br>
+    <h1>Bienvenido, {{ session('usuario_nombre') }}!</h1>
+    <p>Tu email es: {{ session('usuario_email') }}</p>
+    <p>Tu perfil es: {{ session('usuario_perfil') }}</p>
 @endsection
+

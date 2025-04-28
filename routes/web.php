@@ -11,9 +11,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 //====================BIENVENIDA========================================================
-Route::get('/bienvenida', function (){
-    return view('gestionCitas.bienvenida');
-});
+Route::get('/bienvenida', function (){return view('gestionCitas.bienvenida');})->name('bienvenida');
 //======================================================================================
 //====================CLIENTES==========================================================
 Route::get('/clientes', [ClienteController::class, 'viewCliente'])->name('clientes');
@@ -80,7 +78,7 @@ Route::get('/get-horarios-por-servicio', [HorariosController::class, 'getHorario
 
 Route::get('/citas/editar', [CitaController::class, 'editView'])->name('citas.editView');
 Route::get('/api/citas/{id}', [CitaController::class, 'getCita']);
-// Ruta para obtener los horarios por servicio
+// Ruta para obtener los horarios por servicio al actualizar el servicio
 Route::get('/api/horarios', [HorariosController::class, 'getHorariosPorServicio']);
 // Ruta para actualizar la cita
 Route::put('/citasupdate/{id}', [CitaController::class, 'update'])->name('citas.update');
@@ -88,3 +86,15 @@ Route::put('/citasupdate/{id}', [CitaController::class, 'update'])->name('citas.
 use App\Http\Controllers\VehiculoController;
 
 Route::resource('vehiculos', VehiculoController::class);
+Route::get('/get-vehiculo-por-cliente', [VehiculoController::class, 'getVehiculoPorCliente'])->name('getVehiculoPorCliente');
+Route::get('/api/vehiculos', [VehiculoController::class, 'getVehiculoPorCliente']);
+//==========================================================================================
+use App\Http\Controllers\ClienteAuthController;
+
+Route::get('/clientes.login.form', [ClienteAuthController::class, 'showLoginForm'])->name('clientes.login.form');
+Route::post('clientes/login', [ClienteAuthController::class, 'login'])->name('clientes.login');
+Route::post('/logout', [ClienteAuthController::class, 'logout'])->name('logout');
+
+Route::get('/misDatos', [ClienteController::class, 'editPerfilCliente'])->name('misDatos');
+Route::get('/agendar', [ClienteController::class, 'showFormularioCita'])->name('agendar');
+Route::get('/verMisCitas', [CitaController::class, 'editCitas'])->name('verMisCitas');

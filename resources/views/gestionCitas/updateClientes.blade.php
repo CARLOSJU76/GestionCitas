@@ -28,6 +28,14 @@
             <label for="nombre">Nombre</label>
             <input type="text" name="nombre" id="nombre" class="form-control" required>
         </div>
+        <div class="form-group mb-3">
+            <label for="identificacion">Documento de Identidad</label>
+            <input type="text" name="identificacion" id="identificacion" class="form-control" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" class="form-control" required>
+        </div>
 
         <div class="form-group mb-3">
             <label for="telefono">Teléfono</label>
@@ -52,6 +60,8 @@
                 document.getElementById('nombre').value = data.nombre;
                 document.getElementById('telefono').value = data.telefono;
                 document.getElementById('cliente_id').value = data.id;
+                document.getElementById('identificacion').value = data.identificacion;
+                document.getElementById('email').value = data.email;
 
                 // Mostrar el formulario
                 const form = document.getElementById('edit_form');

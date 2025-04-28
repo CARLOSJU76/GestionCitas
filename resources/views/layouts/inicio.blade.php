@@ -93,56 +93,24 @@
             <div class="collapse navbar-collapse" id="navLinks">
                 <ul class="navbar-nav ms-auto">
                     <!-- Mostrar el nombre del usuario y su perfil -->
-                    <li class="nav-item">
-                       <p>Bienvenido, {{ session('usuario_nombre') }}</p>
-                    </li>
+                     
                    
-                    <li class="nav-item">
-                        <a href="{{ url('bienvenida') }}" class="nav-link">
-                            <i class="bi bi-house"></i> Inicio
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('clientes') }}" class="nav-link">
-                        <i class="bi bi-people"></i> Clientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('agregar') }}" class="nav-link">
-                            <i class="bi bi-plus-circle"></i> Agregar
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('actualizar') }}" class="nav-link">
-                        <i class="bi bi-arrow-clockwise"></i> Actualizar Clientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('vehiculos.index') }}" class="nav-link">
-                            <i class="bi bi-car-front"></i> Listar Vehículos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('vehiculos.create') }}" class="nav-link">
-                            <i class="bi bi-car-front-fill"></i> Agregar Vehículo
-                        </a>
-                    </li>
                     <li class="nav-item d-flex align-items-center ms-3">
                         <div class="form-check form-switch text-light">
                             <input class="form-check-input" type="checkbox" id="modoOscuroSwitch">
                             <label class="form-check-label" for="modoOscuroSwitch">Modo Oscuro</label>
                         </div>
                     </li>
-                    
-                <!-- Enlace para cerrar sesión -->
-                <li class="nav-item">
-                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="nav-link btn btn-link text-white">
-                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-                        </button>
-                    </form>
+                    <li class="nav-item">
+                        <a href="{{ route('clientes.login.form') }}" class="nav-link">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
                 </li>
+                <li class="nav-item">
+                        <a href="{{ url('agregar') }}" class="nav-link">
+                            <i class="bi bi-plus-circle"></i> Registrate
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

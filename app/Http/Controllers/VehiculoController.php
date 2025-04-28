@@ -39,4 +39,19 @@ class VehiculoController extends Controller
 
         return redirect()->route('vehiculos.index')->with('success', 'Vehículo eliminado exitosamente.');
     }
+    public function getVehiculoPorCliente(Request $request)
+    {
+        // Obtener los horarios según el servicio_id
+        if ($request->ajax()) {
+    
+            $vehiculos = Vehiculo::where('cliente_id', $request->cliente_id)
+            ->get();
+    
+            // Devolver los horarios en formato JSON
+            return response()->json([
+                'vehiculos' => $vehiculos
+            ]);
+        }
+    }
+    
 }
