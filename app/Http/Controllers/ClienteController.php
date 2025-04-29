@@ -137,9 +137,36 @@ public function updatePerfil(Request $request, $id)
 
     return back()->with('success', 'Perfil actualizado exitosamente.');
 }
+public function editPassword()
+{
 
+    return view('gestionCitas.editPassword');
+}
+public function updatePassword(Request $request)
+    {
+        // Obtener el ID del cliente desde la sesión
+        $clienteId = session('usuario_id');
 
+        // Verificar si el ID del cliente existe en la sesión
+        if (!$clienteId) {
+            return redirect()->route('login')->with('error', 'No estás autenticado');
+        }
 
+        // Validación del campo 'password'
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed', // Confirmación de la contraseña
+        ]);
 
+        // Buscar al cliente en la base de datos por su ID
+        $cliente = Clientes::findOrFail($clienteId);
+
+        // Actualizar la contraseña del cliente
+        $cliente->password = Hash::make($request->password); // Cifrado de la contraseña
+
+        // Guardar los cambios en la base de datos
+        $cliente->save();
+        return back()->with('success', 'Contraseña actualizada exitosamente.');
+
+    }
 
 }

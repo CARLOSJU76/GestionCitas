@@ -8,6 +8,8 @@ use App\Http\Controllers\CitaController;
 use App\Http\Controllers\HorariosController;
 use App\Http\Controllers\HistorialCitasController;
 use App\Http\Middleware\CheckPerfil;
+use App\Http\Controllers\MisionController;
+use App\Http\Controllers\VisionController;
 use App\Models\Clientes;
 
 Route::get('/', function () {
@@ -118,5 +120,16 @@ Route::put('citasestado/{id}', [CitaController::class, 'updateEstado'])->name('c
 Route::get('/editPerfil', [ClienteController::class, 'editPerfil'])->middleware([CheckPerfil::class.':4'])->name('editPerfil');
 Route::put('/clientes/{id}/perfil', [ClienteController::class, 'updatePerfil'])->name('clientes.updatePerfil');
 
+Route::get('/mision/edit', [MisionController::class, 'edit'])->name('mision.edit');
+Route::put('/mision', [MisionController::class, 'update'])->name('mision.update');
+Route::get('/mision', [MisionController::class, 'index'])->name('mision.index');
 
+
+Route::get('/vision', [VisionController::class, 'index'])->name('vision.index');
+
+Route::get('/vision/edit', [VisionController::class, 'edit'])->name('vision.edit');
+Route::put('/vision', [VisionController::class, 'update'])->name('vision.update');
+
+Route::get('/editPassword', [ClienteController::class, 'editPassword'])->name('editPassword');
+Route::put('/updatePassword', [ClienteController::class, 'updatePassword'])->name('updatePassword');
 

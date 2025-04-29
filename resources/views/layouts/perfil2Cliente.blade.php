@@ -84,7 +84,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#">
-            <i class="bi bi-calendar2-week me-2"></i> Gestión de Citas
+            <i class="bi bi-calendar2-week me-2"></i> FullAuto Solutions
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks">
             <span class="navbar-toggler-icon"></span>

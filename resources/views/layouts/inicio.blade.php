@@ -12,67 +12,92 @@
 
 
     {{-- Estilos adicionales para mejor contraste en modo oscuro --}}
+
     <style>
+html, body {
+    height: 100%;
+    margin: 0;
+    font-size: 16px;
+}
+
+body {
+    transition: background 0.3s, color 0.3s;
+    font-size: 1rem;
+    background-image: url('/storage/fondos/alineacion.png'); /* Cambia esta ruta si es necesario */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* Overlay oscuro/claro */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.6); /* fondo claro por defecto */
+    z-index: -1;
+    transition: background 0.3s;
+}
+
+/* Modo oscuro */
+[data-bs-theme="dark"] body::before {
+    background: rgba(0,0,0,0.6);
+}
+
+.navbar, .card, .alert, .container {
+    transition: background 0.3s, color 0.3s;
+}
+
+.formulario-registro {
+    max-width: 480px;
+    background-color: var(--bs-light);
+    padding: 2rem;
+    margin: 0 auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.formulario-registro h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
     html {
-        font-size: 16px;
+        font-size: 14px;
     }
-    body {
-        transition: background 0.3s, color 0.3s;
-        font-size: 1rem;
-    }
-    .navbar, .card, .alert, .container {
-        transition: background 0.3s, color 0.3s;
-    }
-
-    /* Formulario de registro */
     .formulario-registro {
-        max-width: 480px;
-        background-color: var(--bs-light);
-        padding: 2rem;
-        margin: 0 auto;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
     }
+}
 
-    /* Ajustes de título */
-    .formulario-registro h2 {
-        text-align: center;
-        margin-bottom: 1.5rem;
-    }
+[data-bs-theme="dark"] .container {
+    background-color: #2c2c2c !important;
+    color: #f8f9fa !important;
+}
 
-    /* Para pantallas pequeñas */
-    @media (max-width: 768px) {
-        html {
-            font-size: 14px;
-        }
-        .formulario-registro {
-            padding: 1.5rem;
-        }
-    }
+[data-bs-theme="dark"] .form-label {
+    color: #f8f9fa !important;
+}
 
-    /* --- MODO OSCURO --- */
-    [data-bs-theme="dark"] .container {
-        background-color: #2c2c2c !important; /* fondo oscuro para formularios */
-        color: #f8f9fa !important; /* texto claro */
-    }
+[data-bs-theme="dark"] input.form-control {
+    background-color: #343a40 !important;
+    color: #f8f9fa !important;
+    border-color: #6c757d !important;
+}
 
-    [data-bs-theme="dark"] .form-label {
-        color: #f8f9fa !important; /* etiquetas del formulario en claro */
-    }
+[data-bs-theme="dark"] .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
 
-    [data-bs-theme="dark"] input.form-control {
-        background-color: #343a40 !important; /* fondo oscuro en inputs */
-        color: #f8f9fa !important; /* texto claro en inputs */
-        border-color: #6c757d !important; /* bordes suaves */
-    }
-
-    [data-bs-theme="dark"] .btn-primary {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-    }
-    [data-bs-theme="dark"] .formulario-registro {
-    background-color: #2c2c2c !important; /* fondo oscuro para el formulario */
-    color: #f8f9fa !important; /* texto claro */
+[data-bs-theme="dark"] .formulario-registro {
+    background-color: #2c2c2c !important;
+    color: #f8f9fa !important;
 }
 </style>
 
@@ -84,7 +109,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <i class="bi bi-calendar2-week me-2"></i> Gestión de Citas
+                <i class="bi bi-calendar2-week me-2"></i> FullAuto Solutions
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks">
                 <span class="navbar-toggler-icon"></span>
@@ -102,11 +127,16 @@
                         </div>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ url('/mision') }}"class="nav-link">
+                            <i class="bi bi-house"></i> Quienes Somos
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('clientes.login.form') }}" class="nav-link">
                             <i class="bi bi-box-arrow-in-right"></i> Login
                         </a>
-                </li>
-                <li class="nav-item">
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ url('agregar') }}" class="nav-link">
                             <i class="bi bi-plus-circle"></i> Registrate
                         </a>

@@ -19,6 +19,11 @@
     body {
         transition: background 0.3s, color 0.3s;
         font-size: 1rem;
+    background-image: url('/storage/fondos/chequeo.png'); /* Cambia esta ruta si es necesario */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
     }
     .navbar, .card, .alert, .container {
         transition: background 0.3s, color 0.3s;
@@ -84,7 +89,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#">
-            <i class="bi bi-calendar2-week me-2"></i> Gestión de Citas
+            <i class="bi bi-calendar2-week me-2"></i> FullAuto Solutions
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks">
             <span class="navbar-toggler-icon"></span>
@@ -116,6 +121,11 @@
                     <li class="nav-item">
                         <a href="{{ route('horarios.create') }}" class="nav-link">
                             <i class="bi bi-plus-circle"></i> Agregar Horarios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/editPassword') }}"class="nav-link">
+                            <i class="bi bi-house"></i> Cambiar Contraseña
                         </a>
                     </li>
                 <li class="nav-item ms-4">
