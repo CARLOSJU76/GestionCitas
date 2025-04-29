@@ -1,11 +1,11 @@
-@extends('layouts.servinav')
+@extends('layouts.perfil4')
 @section('content')
 
     Sección !<br>    
     En esta sección puedes agregar nuevos servicios!.<br>
 
     <div class="container">
-        <h2>Insertar Cliente</h2>
+        <h2>Agregar un Servicio</h2>
 
         {{-- Mensajes de error --}}
         @if ($errors->any())

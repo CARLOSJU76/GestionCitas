@@ -1,4 +1,4 @@
-@extends('layouts.servinav')
+@extends('layouts.perfil4')
 @section('content')
     Sección actualización de servicios!<br>    
     En esta sección puedes editar y configurar los servicios prestados por nuestra entidad.<br>

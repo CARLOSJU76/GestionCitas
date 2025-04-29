@@ -99,35 +99,25 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                        <a href="{{ url('bienvenida1') }}" class="nav-link">
+                        <a href="{{ url('bienvenida3') }}" class="nav-link">
                             <i class="bi bi-house"></i> Inicio
                         </a>
                     </li>
                 <li class="nav-item ms-4">
-                    <a href="{{ url('createMyCar') }}" class="nav-link px-2">
-                        <i class="bi bi-calendar3"></i> Mis Vehículos
+                    <a href="{{ url('editarEstadoView') }}" class="nav-link px-2">
+                        <i class="bi bi-calendar3"></i> Administrar Estados
                     </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('verMisCitas') }}" class="nav-link px-2">
-                        <i class="bi bi-calendar3"></i> Mis Citas
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('agendar') }}" class="nav-link px-2">
-                        <i class="bi bi-pencil-square"></i> Agendar Citas
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('misDatos') }}" class="nav-link px-2">
-                        <i class="bi bi-person-badge"></i> Mis Datos
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('myHistorial') }}" class="nav-link px-2">
-                        <i class="bi bi-clock-history"></i> Mi Historial
-                    </a>
-                </li>
+                </li>                
+                <li class="nav-item">
+                        <a href="{{ route('horarios.index') }}" class="nav-link">
+                            <i class="bi bi-clock-history"></i> Horarios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('horarios.create') }}" class="nav-link">
+                            <i class="bi bi-plus-circle"></i> Agregar Horarios
+                        </a>
+                    </li>
                 <li class="nav-item ms-4">
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf

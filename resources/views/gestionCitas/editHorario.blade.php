@@ -1,4 +1,4 @@
-@extends('layouts.horariosnav')
+@extends('layouts.perfil3')
 @section('content')
     Edición de Horarios!<br>    
     En esta sección puedes editar los Horarios planeados para la Atención al Cliente.<br>

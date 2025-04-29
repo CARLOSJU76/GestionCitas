@@ -99,35 +99,28 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                        <a href="{{ url('bienvenida1') }}" class="nav-link">
+                        <a href="{{ url('bienvenida4') }}" class="nav-link">
                             <i class="bi bi-house"></i> Inicio
                         </a>
+                </li>
+                <li class="nav-item">
+                        <a href="{{ url('servicios') }}" class="nav-link">
+                        <i class="bi bi-tools"></i> Servicios</a>
                     </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('createMyCar') }}" class="nav-link px-2">
-                        <i class="bi bi-calendar3"></i> Mis Vehículos
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('verMisCitas') }}" class="nav-link px-2">
-                        <i class="bi bi-calendar3"></i> Mis Citas
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('agendar') }}" class="nav-link px-2">
-                        <i class="bi bi-pencil-square"></i> Agendar Citas
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('misDatos') }}" class="nav-link px-2">
-                        <i class="bi bi-person-badge"></i> Mis Datos
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('myHistorial') }}" class="nav-link px-2">
-                        <i class="bi bi-clock-history"></i> Mi Historial
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a href="{{ url('addservicios') }}" class="nav-link">
+                        <i class="bi bi-tools"></i> <i class="bi bi-plus"></i>Agregar Servicios </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('updateservicios') }}" class="nav-link">
+                        <i class="bi bi-gear"></i> <i class="bi bi-arrow-repeat"></i> Actualizar Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('editPerfil') }}" class="nav-link">
+                        <i class="bi bi-gear"></i> <i class="bi bi-arrow-repeat"></i> Perfiles</a>
+                    </li>
+                
+        
                 <li class="nav-item ms-4">
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf

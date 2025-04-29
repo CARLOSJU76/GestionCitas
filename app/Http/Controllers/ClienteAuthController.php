@@ -32,21 +32,35 @@ class ClienteAuthController extends Controller
         // Obtener el nombre del perfil asociado al cliente
         $perfilNombre = $cliente->perfil ? $cliente->perfil->nombre : 'Sin perfil asignado';
 
-        // Si la autenticación es exitosa, guardar los datos en la sesión
+        // Guardar datos en la sesión
         session([
             'usuario_id' => $cliente->id,
+            'usuario_identificacion' => $cliente->identificacion,
             'usuario_nombre' => $cliente->nombre,
             'usuario_email' => $cliente->email,
-            'usuario_perfil' => $perfilNombre, // Guardar el nombre del perfil
+            'usuario_perfil' => $perfilNombre, // Nombre del perfil
+            'usuario_perfil_id' => $cliente->perfil_id,
         ]);
 
-        // Redirigir a la página de bienvenida
-        return redirect()->route('misDatos')->with('success', 'Bienvenido, ' . $cliente->nombre);
+        // Redireccionar según el perfil_id
+        if ($cliente->perfil_id == 1) {
+            return redirect()->route('bienvenida1')->with('success', 'Bienvenido, ' . $cliente->nombre);
+        } elseif ($cliente->perfil_id == 2) {
+            return redirect()->route('bienvenida2')->with('success', 'Bienvenido, ' . $cliente->nombre);
+        } elseif ($cliente->perfil_id == 3) {
+            return redirect()->route('bienvenida3')->with('success', 'Bienvenido, ' . $cliente->nombre);
+        } elseif ($cliente->perfil_id == 4) {
+            return redirect()->route('bienvenida4')->with('success', 'Bienvenido, ' . $cliente->nombre);
+        }else {
+            // Si el perfil_id no es 1 ni 2, lo mandamos a una ruta por defecto
+            return redirect()->route('misDatos')->with('success', 'Bienvenido, ' . $cliente->nombre);
+        }
     }
 
     // Si el login falla, redirigir con un mensaje de error
     return back()->withErrors(['email' => 'Credenciales incorrectas'])->withInput();
 }
+
 public function logout(Request $request)
     {
         // Eliminar los datos de sesión

@@ -14,7 +14,7 @@
     {{-- Estilos adicionales para mejor contraste en modo oscuro --}}
     <style>
     html {
-        font-size: 16px;
+        font-size: 14px;
     }
     body {
         transition: background 0.3s, color 0.3s;
@@ -82,37 +82,33 @@
 
 {{-- Navbar --}}
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <i class="bi bi-calendar2-week me-2"></i> Gestión de Citas
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <i class="bi bi-calendar2-week me-2"></i> Gestión de Citas
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse" id="navLinks">
-                <ul class="navbar-nav ms-auto">
-                    <!-- Mostrar el nombre del usuario y su perfil -->
-                    <li class="nav-item">
-                       <p>Bienvenido, {{ session('usuario_nombre') }}</p>
-                    </li>
-                   
-                    <li class="nav-item">
-                        <a href="{{ url('bienvenida') }}" class="nav-link">
+        <div class="collapse navbar-collapse" id="navLinks">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item ms-4">
+                    <div class="form-check form-switch text-light">
+                        <input class="form-check-input" type="checkbox" id="modoOscuroSwitch">
+                        <label class="form-check-label" for="modoOscuroSwitch">Modo Oscuro</label>
+                    </div>
+                </li>
+                <li class="nav-item">
+                        <a href="{{ url('bienvenida2') }}" class="nav-link">
                             <i class="bi bi-house"></i> Inicio
                         </a>
-                    </li>
-                    <li class="nav-item">
+                </li>
+                <li class="nav-item">
                         <a href="{{ url('clientes') }}" class="nav-link">
                         <i class="bi bi-people"></i> Clientes
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('agregar') }}" class="nav-link">
-                            <i class="bi bi-plus-circle"></i> Agregar
-                        </a>
-                    </li>
-                    <li class="nav-item">
+                </li>
+                <li class="nav-item">
                         <a href="{{ url('actualizar') }}" class="nav-link">
                         <i class="bi bi-arrow-clockwise"></i> Actualizar Clientes
                         </a>
@@ -127,26 +123,24 @@
                             <i class="bi bi-car-front-fill"></i> Agregar Vehículo
                         </a>
                     </li>
-                    <li class="nav-item d-flex align-items-center ms-3">
-                        <div class="form-check form-switch text-light">
-                            <input class="form-check-input" type="checkbox" id="modoOscuroSwitch">
-                            <label class="form-check-label" for="modoOscuroSwitch">Modo Oscuro</label>
-                        </div>
-                    </li>
-                    
-                <!-- Enlace para cerrar sesión -->
-                <li class="nav-item">
+                
+                <li class="nav-item ms-4">
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf
-                        <button type="submit" class="nav-link btn btn-link text-white">
+                        <button type="submit" class="nav-link btn btn-link text-white px-2">
                             <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                         </button>
                     </form>
                 </li>
-                </ul>
-            </div>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
+
+      <!-- Mostrar el nombre del usuario y su perfil -->
+      <p class="nav-item">
+                       <p>Bienvenido, {{ session('usuario_nombre') }}</p>
+    </p>
 
     <main class="container">
         {{-- Alertas --}}
@@ -163,6 +157,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         @endif
+
 
         {{-- Contenido dinámico --}}
         @yield('content')

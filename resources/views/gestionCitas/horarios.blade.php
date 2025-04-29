@@ -1,4 +1,4 @@
-@extends('layouts.horariosnav')
+@extends('layouts.perfil3')
 @section('title', 'Consultar Horarios')
 @section('content')
     <p>Sección Clientes!<br>    

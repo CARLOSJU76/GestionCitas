@@ -54,17 +54,17 @@ public function store(Request $request)
     \App\Models\HistorialCitas::create([
         'cita_id' => $cita->id,
         'cliente_nombre' => $cliente->nombre,
+        'identificacion' => $cliente->identificacion,
         'servicio_nombre' => $servicio->nombre,
         'estado_nombre' => Estados::findOrFail($estado_id)->estado,
         'fecha_hora' => $horario->fecha_hora,
+        'vehiculo' => $vehiculo->placa,
     ]);
 
     // Marcar horario como no disponible
     Horarios::where('id', $request->horario_id)->update(['disponible' => 0]);
-
-    return redirect()->route('addCitas')->with('success', 'Cita registrada correctamente.');
+    return back()->with('success', 'Cita registrada correctamente.');
 }
-
 //=============FUNCIÓN PARA VER TODOS LOS REGISTROS DE LAS CITAS===================================================================================
     public function viewCitas()
     {
@@ -126,7 +126,6 @@ public function update(Request $request, $id)
     $request->validate([
         'cliente_id' => 'required|exists:clientes,id',
         'servicio_id' => 'required|exists:servicios,id',
-      
         'horario_id' => 'required|exists:horarios,id',
         'vehiculo_id' => 'required|exists:vehiculos,id', 
     ]);
@@ -137,7 +136,6 @@ public function update(Request $request, $id)
     // Buscar datos actualizados
     $cliente = Clientes::findOrFail($request->cliente_id);
     $servicio = Servicios::findOrFail($request->servicio_id);
-  
     $nuevoHorario = Horarios::findOrFail($request->horario_id);
     $vehiculo = Vehiculo::findOrFail($request->vehiculo_id);
 
@@ -145,7 +143,6 @@ public function update(Request $request, $id)
     $cita->update([
         'cliente_id' => $cliente->id,
         'servicio_id' => $servicio->id,
-      
         'horario_id' => $nuevoHorario->id,
         'vehiculo_id' => $vehiculo->id, 
     ]);
@@ -161,13 +158,15 @@ public function update(Request $request, $id)
         ['cita_id' => $cita->id], // condición para encontrar el registro
         [ // valores a actualizar
             'cliente_nombre' => $cliente->nombre,
+            'identificacion' => $cliente->identificacion,
             'servicio_nombre' => $servicio->nombre,
-          
             'fecha_hora' => $nuevoHorario->fecha_hora,
+            'vehiculo' => $vehiculo->placa,
         ]
     );
 
-    return redirect()->route('addCitas')->with('success', 'Cita actualizada correctamente.');
+    return back()->with('success', 'Cita actualizada correctamente.');
+    
 }
 public function getCita($id)
 {
@@ -197,6 +196,47 @@ public function editCitas()
 
     return view('gestioncitas.editMyCita', compact('citas', 'clientes', 'servicios', 'estados'));
 }
+public function updateEstado(Request $request, $id)
+{
+        $request->validate([
+            'estado_id' => 'required|exists:estados,id',
+        ]);
 
+    $cita = Citas::findOrFail($id);
+    $horarioAnteriorId = $cita->horario_id;
+
+    // Buscar datos actualizados
+   
+    $estado = Estados::findOrFail($request->estado_id);
+
+    // Actualizar la cita
+    $cita->update([
+       
+        'estado_id'=>$estado->id,
+    ]);
+
+    // ✅ Actualizar historial
+    \App\Models\HistorialCitas::updateOrCreate(
+        ['cita_id' => $cita->id], // condición para encontrar el registro
+        [ // valores a actualizar
+           
+            'estado_nombre' => $estado->estado,
+        ]
+    );
+
+    return back()->with('success', 'Se ha actualizado el estado de la cita.');
+    
+}
+public function editarEstadoView()
+{
+    $citas = Citas::with(['cliente', 'horario', 'vehiculo'])->orderBy('horario_id', 'asc')->get();
+
+    $clientes = Clientes::all();
+    $servicios = Servicios::all();
+    $estados = Estados::all();
+    $vehiculos = Vehiculo::all();
+
+    return view('gestioncitas.editarEstado', compact('citas', 'clientes', 'servicios', 'estados', 'vehiculos'));
+}
 
 }

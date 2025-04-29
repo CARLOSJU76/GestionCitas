@@ -82,8 +82,7 @@ class ClienteController extends Controller
         // Guardar los cambios
         $clientes->save();
         
-        return redirect()->route('actualizar', ['id' => $id])->with('success', 
-        'Información actualizada en BD exitosamente.');
+        return back()->with('success', 'Información actualizada en BD exitosamente.');
     }
 
     public function getCliente($id)
@@ -114,6 +113,31 @@ public function showFormularioCita()
 
     return view('gestioncitas.crearcita', compact('servicios', 'vehiculos', 'usuario_id'));
 }
+public function editPerfil()
+{
+    $clientes = Clientes::all();  // Obtener todos los clientes
+    $perfiles = Perfil::all();   // Obtener todos los perfiles disponibles
+
+    return view('gestionCitas.editPerfil', compact('clientes', 'perfiles'));
+}
+
+public function updatePerfil(Request $request, $id)
+{
+    // Validar solo el perfil
+    $request->validate([
+        'perfil_id' => 'required|exists:perfils,id',
+    ]);
+
+    // Buscar cliente
+    $cliente = Clientes::findOrFail($id);
+
+    // Actualizar solo el perfil
+    $cliente->perfil_id = $request->input('perfil_id');
+    $cliente->save();
+
+    return back()->with('success', 'Perfil actualizado exitosamente.');
+}
+
 
 
 

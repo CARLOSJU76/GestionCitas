@@ -1,4 +1,4 @@
-@extends('layouts.clientenav')
+@extends('layouts.perfil2Cliente')
 @section('content')
     Sección Clientes!<br>    
     En esta sección puedes consultar los Clientes y/o pacientes.<br>

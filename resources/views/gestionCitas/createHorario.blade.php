@@ -1,4 +1,4 @@
-@extends('layouts.horariosnav')
+@extends('layouts.perfil3')
 @section('title', 'Agregar Horarios por Semana')
 @section('content')
     Sección registro de Horarios!<br>    

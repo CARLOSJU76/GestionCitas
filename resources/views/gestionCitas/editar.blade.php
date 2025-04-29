@@ -1,4 +1,4 @@
-@extends('layouts.citasnav')
+@extends('layouts.perfil2Citas')
 
 @section('content')
 <div class="container">

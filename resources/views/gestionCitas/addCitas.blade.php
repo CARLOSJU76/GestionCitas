@@ -1,4 +1,4 @@
-@extends('layouts.citasnav')
+@extends('layouts.perfil2Citas') 
 @section('content')
     Sección agendar Citas!<br>    
     En esta sección puedes agendar nuevas Citas para nuestros clientes.<br>

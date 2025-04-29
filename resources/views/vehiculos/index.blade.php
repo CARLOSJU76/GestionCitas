@@ -1,4 +1,4 @@
-@extends('layouts.clientenav') <!-- O el layout que uses -->
+@extends('layouts.perfil2Cliente') <!-- O el layout que uses -->
 @section('content')
 
 <div class="container">

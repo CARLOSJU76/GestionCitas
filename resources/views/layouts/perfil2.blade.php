@@ -14,7 +14,7 @@
     {{-- Estilos adicionales para mejor contraste en modo oscuro --}}
     <style>
     html {
-        font-size: 14px;
+        font-size: 12px;
     }
     body {
         transition: background 0.3s, color 0.3s;
@@ -99,35 +99,20 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                        <a href="{{ url('bienvenida1') }}" class="nav-link">
+                        <a href="{{ url('bienvenida2') }}" class="nav-link">
                             <i class="bi bi-house"></i> Inicio
                         </a>
+                </li>
+                <li class="nav-item">
+                        <a href="{{ url('clientes') }}" class="nav-link">
+                        <i class="bi bi-people"></i> Clientes
+                        </a>
+                </li>
+              
+                <li class="nav-item">
+                        <a href="{{ url('citas') }}" class="nav-link">
+                        <i class="bi bi-calendar-event"></i> Citas </a>
                     </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('createMyCar') }}" class="nav-link px-2">
-                        <i class="bi bi-calendar3"></i> Mis Vehículos
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('verMisCitas') }}" class="nav-link px-2">
-                        <i class="bi bi-calendar3"></i> Mis Citas
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('agendar') }}" class="nav-link px-2">
-                        <i class="bi bi-pencil-square"></i> Agendar Citas
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('misDatos') }}" class="nav-link px-2">
-                        <i class="bi bi-person-badge"></i> Mis Datos
-                    </a>
-                </li>
-                <li class="nav-item ms-4">
-                    <a href="{{ url('myHistorial') }}" class="nav-link px-2">
-                        <i class="bi bi-clock-history"></i> Mi Historial
-                    </a>
-                </li>
                 <li class="nav-item ms-4">
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf

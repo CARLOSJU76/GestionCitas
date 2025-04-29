@@ -53,5 +53,47 @@ class VehiculoController extends Controller
             ]);
         }
     }
+    public function createMyCar()
+    {
+        $clienteId = session('usuario_id');
+    
+        $vehiculos = Vehiculo::where('cliente_id', $clienteId)->get();
+    
+        return view('vehiculos.storeMyCar', compact('vehiculos'));
+    }
+    
+    
+
+public function storeMyCar(Request $request)
+{
+    $request->validate([
+        'placa' => 'required|string|max:10|unique:vehiculos,placa',
+    ]);
+
+    // Recuperamos el cliente_id guardado en sesión
+    $clienteId = session('usuario_id');
+
+Vehiculo::create([
+        'placa' => $request->placa,
+        'cliente_id' => $clienteId,
+    ]);
+
+    return redirect()->route('createMyCar')->with('success', 'Vehículo registrado correctamente.');
+}
+public function destroyMyCar($id)
+{
+    $clienteId = session('usuario_id');
+
+    // Asegurarse de que el vehículo pertenece al cliente
+    $vehiculo = Vehiculo::where('id', $id)
+                ->where('cliente_id', $clienteId)
+                ->firstOrFail();
+
+    $vehiculo->delete();
+
+    return redirect()->route('createMyCar')->with('success', 'Vehículo eliminado exitosamente.');
+}
+
+
     
 }
