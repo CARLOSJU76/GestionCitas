@@ -11,7 +11,7 @@ use App\Http\Middleware\CheckPerfil;
 use App\Models\Clientes;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('gestionCitas/login');
 });
 //====================BIENVENIDA========================================================
 Route::get('/bienvenida1', function (){return view('gestionCitas.bienvenida1');})->middleware([CheckPerfil::class.':1'])->name('bienvenida1');
